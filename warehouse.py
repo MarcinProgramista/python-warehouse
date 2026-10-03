@@ -62,3 +62,15 @@ def update_quantity(products, name, quantity):
         product["quantity"] += quantity
         return True
     return False
+
+def sell_product(products, name, quantity):
+    product = search_product(products, name)
+
+    if not product:
+        return False
+
+    if product["quantity"] < quantity:
+        return None
+
+    product["quantity"] -= quantity
+    return True
