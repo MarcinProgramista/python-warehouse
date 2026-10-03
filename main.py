@@ -53,7 +53,7 @@ def handle_choice(choice, products):
     elif choice == '6':
         add_product_menu(products)
     elif choice == '7':
-        update_quantity(products)
+        update_quantity_menu(products)
     elif choice == '8':
         sell_product(products)  
     elif choice == '9':
@@ -70,14 +70,14 @@ def add_product_menu(products):
         print('Product added successfully.')
     else:
         print('Product already exists.')
-def update_quantity(products):
+def update_quantity_menu(products):
     name = input('Enter product name: ')
     new_quantity = get_positive_int('Enter quantity: ')
-    product = warehouse.search_product(products, name)
-    if product:
-        product["quantity"] = new_quantity + product["quantity"]
+    if warehouse.update_quantity(products, name, new_quantity):
+        print('Quantity updated successfully.')
     else:
         print('Product not found.')
+
 def sell_product(products):
     name = input('Enter product name: ')
     quantity_to_sell = get_positive_int('Enter quantity: ')
@@ -90,7 +90,8 @@ def sell_product(products):
         else:
             print('Not enough stock to sell.')
     else:
-        print('Product not found.')                                                                                                                                                                                                                                                                                  
+        print('Product not found.')    
+                                                                                                                                                                                                                                                                                      
 while True:
     show_menu(warehouse_name)
     choice = input('Choose an option: ')

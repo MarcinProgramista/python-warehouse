@@ -54,3 +54,11 @@ def add_product(products, name, quantity, price):
     }
     products.append(new_product)
     return True
+
+def update_quantity(products, name, quantity):
+    product = search_product(products, name)
+
+    if product:
+        product["quantity"] += quantity
+        return True
+    return False
