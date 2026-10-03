@@ -33,12 +33,42 @@ def search_product(products, search_name):
             return product
     return None
 
-def delete_product(products):
-    name = input('Enter product name to delete: ')
+def delete_product(products, name):
+    product = search_product(products, name)
+
+    if not product:
+        return False
+    products.remove(product)
+    return True
+
+def add_product(products, name, quantity, price):
+    if search_product(products, name):
+        return False
+
+    new_product = {
+        "name": name,
+        "quantity": quantity,
+        "price": price
+    }
+    products.append(new_product)
+    return True
+
+def update_quantity(products, name, quantity):
     product = search_product(products, name)
 
     if product:
-        products.remove(product)
-        print(f'Product "{product["name"]}" deleted.')
-    else:
-        print('Product not found.')
+        product["quantity"] += quantity
+        return True
+    return False
+
+def sell_product(products, name, quantity):
+    product = search_product(products, name)
+
+    if not product:
+        return False
+
+    if product["quantity"] < quantity:
+        return None
+
+    product["quantity"] -= quantity
+    return True

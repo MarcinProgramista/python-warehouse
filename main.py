@@ -51,51 +51,54 @@ def handle_choice(choice, products):
             print('Product not found.')
         
     elif choice == '6':
-        add_product(products)
+        add_product_menu(products)
     elif choice == '7':
-        update_quantity(products)
+        update_quantity_menu(products)
     elif choice == '8':
-        sell_product(products)  
+        sell_product_menu(products)  
     elif choice == '9':
-        warehouse.delete_product(products)
+        delete_product_menu(products)
     else:
         print('Invalid option.')
 
-def add_product(products):
+def delete_product_menu(products):
+    name = input('Enter product name to delete: ')
+    if warehouse.delete_product(products, name):
+        print('Product deleted successfully.')
+    else:
+        print('Product not found.')
+
+def add_product_menu(products):
     name = input('Enter product name: ')
     quantity = get_positive_int('Enter quantity: ')
     price = get_positive_float('Enter price: ')
-   
-    new_product = {
-        "name": name,
-        "quantity": quantity,
-        "price": price
-    }
-    if warehouse.search_product(products, new_product["name"]):
-        print('Product already exists.')
+
+    if warehouse.add_product(products, name, quantity, price):
+        print('Product added successfully.')
     else:
-        products.append(new_product)
-def update_quantity(products):
+        print('Product already exists.')
+
+def update_quantity_menu(products):
     name = input('Enter product name: ')
     new_quantity = get_positive_int('Enter quantity: ')
-    product = warehouse.search_product(products, name)
-    if product:
-        product["quantity"] = new_quantity + product["quantity"]
+    if warehouse.update_quantity(products, name, new_quantity):
+        print('Quantity updated successfully.')
     else:
         print('Product not found.')
-def sell_product(products):
+
+def sell_product_menu(products):
     name = input('Enter product name: ')
     quantity_to_sell = get_positive_int('Enter quantity: ')
-    product = warehouse.search_product(products, name)
 
-    if product:
-        if product["quantity"] >= quantity_to_sell:
-            product["quantity"] -= quantity_to_sell
-            print(f'Sold {quantity_to_sell} of {product["name"]}.')
-        else:
-            print('Not enough stock to sell.')
+    result = warehouse.sell_product(products, name, quantity_to_sell) 
+
+    if result is True:
+        print('Product sold successfully.')
+    elif result is False:
+        print('Product not found.')
     else:
-        print('Product not found.')                                                                                                                                                                                                                                                                                  
+        print('Not enough stock.')
+
 while True:
     show_menu(warehouse_name)
     choice = input('Choose an option: ')
@@ -103,5 +106,6 @@ while True:
     if choice == '0':
             print('Goodbye!')
             break
-    
+
     handle_choice(choice, products)
+    
