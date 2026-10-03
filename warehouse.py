@@ -31,3 +31,13 @@ def search_product(products, search_name):
         if search_name.lower() in product['name'].lower():
             return product
     return None
+
+def delete_product(products):
+    name = input('Enter product name to delete: ')
+    product = search_product(products, name)
+
+    if product:
+        products.remove(product)
+        print(f'Product "{product["name"]}" deleted.')
+    else:
+        print('Product not found.')

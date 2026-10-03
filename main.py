@@ -19,6 +19,7 @@ def show_menu(warehouse_name):
     print('6. Add product')
     print('7. Update quantity')
     print('8. Sell product')
+    print('9. Delete product')
     print('0. Exit')
 
 def handle_choice(choice, products):
@@ -55,6 +56,8 @@ def handle_choice(choice, products):
         update_quantity(products)
     elif choice == '8':
         sell_product(products)  
+    elif choice == '9':
+        warehouse.delete_product(products)
     else:
         print('Invalid option.')
 
