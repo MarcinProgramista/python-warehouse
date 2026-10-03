@@ -42,3 +42,15 @@ def delete_product(products):
         print(f'Product "{product["name"]}" deleted.')
     else:
         print('Product not found.')
+
+def add_product(products, name, quantity, price):
+    if search_product(products, name):
+        return False
+
+    new_product = {
+        "name": name,
+        "quantity": quantity,
+        "price": price
+    }
+    products.append(new_product)
+    return True

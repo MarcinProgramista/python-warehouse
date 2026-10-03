@@ -51,7 +51,7 @@ def handle_choice(choice, products):
             print('Product not found.')
         
     elif choice == '6':
-        add_product(products)
+        add_product_menu(products)
     elif choice == '7':
         update_quantity(products)
     elif choice == '8':
@@ -61,20 +61,15 @@ def handle_choice(choice, products):
     else:
         print('Invalid option.')
 
-def add_product(products):
+def add_product_menu(products):
     name = input('Enter product name: ')
     quantity = get_positive_int('Enter quantity: ')
     price = get_positive_float('Enter price: ')
    
-    new_product = {
-        "name": name,
-        "quantity": quantity,
-        "price": price
-    }
-    if warehouse.search_product(products, new_product["name"]):
-        print('Product already exists.')
+    if warehouse.add_product(products, name, quantity, price):
+        print('Product added successfully.')
     else:
-        products.append(new_product)
+        print('Product already exists.')
 def update_quantity(products):
     name = input('Enter product name: ')
     new_quantity = get_positive_int('Enter quantity: ')
