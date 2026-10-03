@@ -27,6 +27,7 @@ def find_most_expensive(products):
     return most_expensive
 
 def search_product(products, search_name):
+    search_name = search_name.strip()
     for product in products:
         if search_name.lower() in product['name'].lower():
             return product
