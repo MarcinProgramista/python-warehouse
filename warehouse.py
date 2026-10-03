@@ -33,15 +33,13 @@ def search_product(products, search_name):
             return product
     return None
 
-def delete_product(products):
-    name = input('Enter product name to delete: ')
+def delete_product(products, name):
     product = search_product(products, name)
 
-    if product:
-        products.remove(product)
-        print(f'Product "{product["name"]}" deleted.')
-    else:
-        print('Product not found.')
+    if not product:
+        return False
+    products.remove(product)
+    return True
 
 def add_product(products, name, quantity, price):
     if search_product(products, name):

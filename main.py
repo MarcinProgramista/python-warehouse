@@ -57,19 +57,27 @@ def handle_choice(choice, products):
     elif choice == '8':
         sell_product_menu(products)  
     elif choice == '9':
-        warehouse.delete_product(products)
+        delete_product_menu(products)
     else:
         print('Invalid option.')
+
+def delete_product_menu(products):
+    name = input('Enter product name to delete: ')
+    if warehouse.delete_product(products, name):
+        print('Product deleted successfully.')
+    else:
+        print('Product not found.')
 
 def add_product_menu(products):
     name = input('Enter product name: ')
     quantity = get_positive_int('Enter quantity: ')
     price = get_positive_float('Enter price: ')
-   
+
     if warehouse.add_product(products, name, quantity, price):
         print('Product added successfully.')
     else:
         print('Product already exists.')
+
 def update_quantity_menu(products):
     name = input('Enter product name: ')
     new_quantity = get_positive_int('Enter quantity: ')
@@ -98,5 +106,6 @@ while True:
     if choice == '0':
             print('Goodbye!')
             break
-    
+
     handle_choice(choice, products)
+    
