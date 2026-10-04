@@ -28,3 +28,13 @@ def test_add_product():
     assert result is True
     assert len(products) == 3
     assert products[-1]["name"] == "Keyboard"
+
+def test_add_product_duplicate():
+    products = [
+        {"name": "Laptop", "quantity": 10, "price": 1500},
+        {"name": "Monitor", "quantity": 2, "price": 1200},
+    ]
+
+    result = add_product(products, "Laptop", 5, 100)
+    assert result is False
+    assert len(products) == 2
