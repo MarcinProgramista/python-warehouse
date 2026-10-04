@@ -1,4 +1,4 @@
-from warehouse import search_product, add_product, update_quantity, sell_product
+from warehouse import search_product, add_product, update_quantity, sell_product, delete_product
 
 def test_search_product_found():
     products = [
@@ -77,3 +77,14 @@ def test_sell_product_not_found():
 
     result = sell_product(products, "Phone", 1)
     assert result is False
+
+def test_delete_product():
+    products = [
+        {"name": "Laptop", "quantity": 10, "price": 1500},
+        {"name": "Monitor", "quantity": 2, "price": 1200}
+    ]
+
+    result = delete_product(products, "Laptop")
+    assert result is True
+    assert len(products) == 1
+    assert products[0]["name"] == "Monitor"
