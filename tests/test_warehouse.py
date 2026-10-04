@@ -88,3 +88,13 @@ def test_delete_product():
     assert result is True
     assert len(products) == 1
     assert products[0]["name"] == "Monitor"
+
+def test_delete_product_not_found():
+    products = [
+        {"name": "Laptop", "quantity": 10, "price": 1500},
+        {"name": "Monitor", "quantity": 2, "price": 1200}
+    ]
+
+    result = delete_product(products, "Phone")
+    assert result is False
+    assert len(products) == 2
