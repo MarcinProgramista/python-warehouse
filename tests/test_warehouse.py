@@ -1,5 +1,5 @@
 from warehouse import search_product, add_product, update_quantity, sell_product, delete_product
-from utils import get_positive_int
+from utils import get_positive_int, get_positive_float
 
 def test_search_product_found():
     products = [
@@ -124,3 +124,28 @@ def test_get_positive_int_invalid_input(monkeypatch):
     result = get_positive_int("Enter quantity: ")
 
     assert result == 10
+
+def test_get_positive_float(monkeypatch):
+
+    monkeypatch.setattr('builtins.input', lambda _: '12.5')
+
+    result = get_positive_float('Enter price:')
+
+    assert result == 12.5
+
+def test_get_positive_float_negative(monkeypatch):
+    inputs = iter(["-5.5", "10.5"])
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+
+    result = get_positive_float("Enter price: ")
+
+    assert result == 10.5
+
+def test_get_positive_float_invalid_input(monkeypatch):
+    inputs = iter(["abc", "10.5"])
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+
+    result = get_positive_float("Enter price: ")
+
+    assert result == 10.5
+
