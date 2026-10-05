@@ -1,4 +1,5 @@
 from warehouse import search_product, add_product, update_quantity, sell_product, delete_product
+from utils import get_positive_int
 
 def test_search_product_found():
     products = [
@@ -98,3 +99,28 @@ def test_delete_product_not_found():
     result = delete_product(products, "Phone")
     assert result is False
     assert len(products) == 2
+
+def test_get_positive_int(monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: '5')
+
+    result = get_positive_int('Enter quantity: ')
+
+    assert result == 5
+
+def test_get_positive_int_negative(monkeypatch):
+    inputs = iter(["-5", "10"])
+
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+
+    result = get_positive_int("Enter quantity: ")
+
+    assert result == 10
+
+def test_get_positive_int_invalid_input(monkeypatch):
+    inputs = iter(["abc", "10"])
+
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+
+    result = get_positive_int("Enter quantity: ")
+
+    assert result == 10
