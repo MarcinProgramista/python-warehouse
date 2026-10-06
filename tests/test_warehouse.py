@@ -134,3 +134,11 @@ def test_add_product_duplicate_parametrized(products, name, quantity, price):
 
     assert result is False
     assert len(products) == 2
+
+def test_invalid_int():
+    with pytest.raises(ValueError):
+        int("abc")
+
+def test_invalid_quantity():
+    with pytest.raises(ValueError):
+        int("-abc")
