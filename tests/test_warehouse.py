@@ -1,3 +1,4 @@
+import pytest
 from warehouse import search_product, add_product, update_quantity, sell_product, delete_product
 from utils import get_positive_int, get_positive_float
 
@@ -108,3 +109,28 @@ def test_get_positive_float_invalid_input(monkeypatch):
 
     assert result == 10.5
 
+@pytest.mark.parametrize("name, quantity, price, expected",
+    [
+        ("Keyboard", 5, 100, True),
+        ("Mouse", 10, 50, True),
+        ("Printer", 2, 800, True),
+    ]
+)
+def test_add_product_parametrized(products, name, quantity, price, expected):
+    result = add_product(products, name, quantity, price)
+
+    assert result == expected
+    assert products[-1]["name"] == name
+
+@pytest.mark.parametrize(
+    "name, quantity, price",
+    [
+        ("Laptop", 5, 100),
+        ("Monitor", 10, 50)
+    ]
+)
+def test_add_product_duplicate_parametrized(products, name, quantity, price):
+    result = add_product(products, name, quantity, price)
+
+    assert result is False
+    assert len(products) == 2
