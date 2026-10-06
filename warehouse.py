@@ -42,6 +42,8 @@ def delete_product(products, name):
     return True
 
 def add_product(products, name, quantity, price):
+    validate_quantity(quantity)
+
     if search_product(products, name):
         return False
 
@@ -54,6 +56,8 @@ def add_product(products, name, quantity, price):
     return True
 
 def update_quantity(products, name, quantity):
+    validate_quantity(quantity)
+
     product = search_product(products, name)
 
     if product:
@@ -62,8 +66,9 @@ def update_quantity(products, name, quantity):
     return False
 
 def sell_product(products, name, quantity):
-    product = search_product(products, name)
+    validate_quantity(quantity)
 
+    product = search_product(products, name)
     if not product:
         return False
 
