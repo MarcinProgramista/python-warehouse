@@ -1,5 +1,5 @@
 import pytest
-from warehouse import search_product, add_product, update_quantity, sell_product, delete_product
+from warehouse import search_product, add_product, update_quantity, sell_product, delete_product, validate_quantity
 from utils import get_positive_int, get_positive_float
 
 def test_search_product_found(products):
@@ -142,3 +142,12 @@ def test_invalid_int():
 def test_invalid_quantity():
     with pytest.raises(ValueError):
         int("-abc")
+
+def test_validate_quantity_valid():
+    result = validate_quantity(10)
+
+    assert result is None
+
+def test_validate_quantity_negative():
+    with pytest.raises(ValueError):
+        validate_quantity(-5)
