@@ -72,3 +72,7 @@ def sell_product(products, name, quantity):
 
     product["quantity"] -= quantity
     return True
+
+def validate_quantity(quantity):
+    if quantity < 0:
+        raise ValueError("Quantity cannot be negative.")
