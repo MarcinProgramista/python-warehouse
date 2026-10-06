@@ -135,6 +135,10 @@ def test_add_product_duplicate_parametrized(products, name, quantity, price):
     assert result is False
     assert len(products) == 2
 
+def test_add_product_negative_quantity(products):
+    with pytest.raises(ValueError):
+        add_product(products, "Keyboard", -5, 100)
+
 def test_invalid_int():
     with pytest.raises(ValueError):
         int("abc")
@@ -151,3 +155,11 @@ def test_validate_quantity_valid():
 def test_validate_quantity_negative():
     with pytest.raises(ValueError):
         validate_quantity(-5)
+
+def test_update_quantity_negative(products):
+    with pytest.raises(ValueError):
+        update_quantity(products, "Laptop", -5)
+
+def test_sell_product_negative(products):
+    with pytest.raises(ValueError):
+        sell_product(products, "Laptop", -5)
