@@ -1,5 +1,16 @@
 import pytest
-from warehouse import search_product, add_product, update_quantity, sell_product, delete_product, validate_quantity
+from warehouse import (
+    search_product,
+    add_product,
+    update_quantity,
+    sell_product,
+    delete_product,
+    validate_quantity,
+    calculate_total_value,
+    find_most_expensive,
+    show_low_stock,
+    show_products,
+)
 from utils import get_positive_int, get_positive_float
 
 def test_search_product_found(products):
@@ -56,7 +67,7 @@ def test_delete_product(products):
 
 def test_delete_product_not_found(products):
     result = delete_product(products, "Phone")
-    
+
     assert result is False
     assert len(products) == 2
 
@@ -163,3 +174,35 @@ def test_update_quantity_negative(products):
 def test_sell_product_negative(products):
     with pytest.raises(ValueError):
         sell_product(products, "Laptop", -5)
+
+def test_update_quantity_not_found(products):
+    result = update_quantity(products, "Phone", 5)
+
+    assert result is False
+
+def test_calculate_total_value(products):
+    result = calculate_total_value(products)
+
+    assert result == 17400
+
+def test_find_most_expensive(products):
+    result = find_most_expensive(products)
+
+    assert result["name"] == "Laptop"
+    assert result["price"] == 1500
+
+def test_show_low_stock(products, capsys):
+    show_low_stock(products)
+
+    captured = capsys.readouterr()
+
+    assert "Monitor" in captured.out
+    assert "Laptop" not in captured.out
+
+def test_show_products(products, capsys):
+    show_products(products)
+
+    captured = capsys.readouterr()
+
+    assert "Laptop" in captured.out
+    assert "Monitor" in captured.out
