@@ -1,5 +1,11 @@
 from argon2 import PasswordHasher
+
 password_hasher = PasswordHasher()
+
+SUCCESS = "SUCCESS"
+INVALID_EMAIL = "INVALID_EMAIL"
+INVALID_PASSWORD = "INVALID_PASSWORD"
+EMAIL_ALREADY_EXISTS = "EMAIL_ALREADY_EXISTS"
 
 def hash_password(password):
     return password_hasher.hash(password)
@@ -32,16 +38,16 @@ def register_user(users, email, password):
     email = normalize_email(email)
 
     if not is_valid_email(email):
-        return False
+        return INVALID_EMAIL
 
     if not is_valid_password(password):
-        return False
+        return INVALID_PASSWORD
 
     if email in users:
-        return False
+        return EMAIL_ALREADY_EXISTS
 
     users[email] = hash_password(password)
-    return True
+    return SUCCESS
 
 def verify_password(password, hashed_password):
     try:
