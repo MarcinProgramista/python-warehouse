@@ -1,6 +1,34 @@
 from utils import get_positive_int, get_positive_float
 from user_warehouse import get_user_products
+from users import (
+    register_user,
+    login_user,
+    SUCCESS,
+)
 import warehouse
+
+users = {}
+
+def login(users):
+    email = input("Email: ")
+    password = input("Password: ")
+
+    result = login_user(users, email, password)
+
+    if result == SUCCESS:
+        print("Login successful!")
+        return email.strip().lower()
+
+    print("Invalid email or password")
+    return None
+
+register_user(
+    users,
+    "marcin@example.com",
+    "Magazyn12345!"
+)
+
+
 warehouse_name = "MY WAREHOUSE"
 user_warehouses = {
     "marcin@example.com": [
@@ -11,8 +39,7 @@ user_warehouses = {
     ]
 }
 
-current_user = "marcin@example.com"
-products = get_user_products(user_warehouses, current_user)
+
 def show_menu(warehouse_name):
     print('========================')
     print(f'     {warehouse_name}      ')
@@ -105,13 +132,25 @@ def sell_product_menu(products):
     else:
         print('Not enough stock.')
 
-while True:
-    show_menu(warehouse_name)
-    choice = input('Choose an option: ')
-   
-    if choice == '0':
+def main():
+    current_user = login(users)
+
+    if current_user is None:
+        print("Access denied.")
+        return
+
+    products = get_user_products(user_warehouses, current_user)
+
+    while True:
+        show_menu(warehouse_name)
+        choice = input('Choose an option: ')
+
+        if choice == '0':
             print('Goodbye!')
             break
 
-    handle_choice(choice, products)
-    
+        handle_choice(choice, products)
+
+
+if __name__ == "__main__":
+    main()
