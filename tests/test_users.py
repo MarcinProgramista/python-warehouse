@@ -186,3 +186,38 @@ def test_login_user_not_found():
     )
 
     assert result == INVALID_CREDENTIALS
+
+def test_login_user_normalizes_email():
+    users = {}
+
+    register_user(
+        users,
+        "marcin@example.com",
+        "password1234"
+    )
+
+    result = login_user(
+        users,
+        "MARCIN@EXAMPLE.COM",
+        "password1234"
+    )
+
+    assert result == SUCCESS
+
+def test_login_user_wrong_password_does_not_change_users():
+    users = {}
+    register_user(
+        users,
+        "marcin@example.com",
+        "password1234"
+    )
+
+    users_before = users.copy()
+
+    login_user(
+        users,
+        "marcin@example.com",
+        "wrongpassword123"
+    )
+
+    assert users == users_before
