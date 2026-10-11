@@ -1,5 +1,6 @@
-from main import login
-from users import register_user, SUCCESS
+from main import login, register
+from users import register_user
+
 
 def test_login_success(monkeypatch):
     users = {}
@@ -32,3 +33,25 @@ def test_login_unknown_user(monkeypatch):
     result = login(users)
 
     assert result is None
+
+def test_register_success(monkeypatch):
+    users = {}
+    inputs = iter(["new@example.com", "StrongPassword123!"])
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+
+    result = register(users)
+
+    assert result is True
+    assert "new@example.com" in users
+
+
+def test_register_existing_email(monkeypatch):
+    users = {}
+    register_user(users, "test@example.com", "StrongPassword123!")
+
+    inputs = iter(["test@example.com", "AnotherPassword123!"])
+    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+
+    result = register(users)
+
+    assert result is False

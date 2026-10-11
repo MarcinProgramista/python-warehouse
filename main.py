@@ -22,6 +22,19 @@ def login(users):
     print("Invalid email or password")
     return None
 
+def register(users):
+    email = input("Email: ")
+    password = input("Password: ")
+
+    result = register_user(users, email, password)
+
+    if result == SUCCESS:
+        print("Registration successful!")
+        return True
+
+    print(f"Registration failed: {result}")
+    return False
+
 register_user(
     users,
     "marcin@example.com",
@@ -132,24 +145,45 @@ def sell_product_menu(products):
     else:
         print('Not enough stock.')
 
-def main():
-    current_user = login(users)
 
-    if current_user is None:
-        print("Access denied.")
-        return
+def main():
+    while True:
+        print("\n1. Login")
+        print("2. Register")
+        print("0. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            current_user = login(users)
+
+            if current_user is not None:
+                break
+
+            print("Login failed. Try again.")
+
+        elif choice == "2":
+            register(users)
+
+        elif choice == "0":
+            print("Goodbye!")
+            return
+
+        else:
+            print("Invalid option.")
 
     products = get_user_products(user_warehouses, current_user)
 
     while True:
         show_menu(warehouse_name)
-        choice = input('Choose an option: ')
+        choice = input("Choose an option: ")
 
-        if choice == '0':
-            print('Goodbye!')
+        if choice == "0":
+            print("Goodbye!")
             break
 
         handle_choice(choice, products)
+
 
 
 if __name__ == "__main__":
