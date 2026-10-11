@@ -301,3 +301,31 @@ def test_change_password_user_not_found():
 
     assert result == INVALID_CREDENTIALS
     assert users == {}
+
+def test_password_with_spaces_in_preserved():
+    users = {}
+    password = "  password1234  "
+
+    result = register_user(
+        users,
+        "marcin@example.com",
+        password
+    )
+
+    assert result == SUCCESS
+    assert verify_password(
+        password,
+        users["marcin@example.com"]
+    ) is True
+    assert verify_password(
+        password.strip(),
+        users["marcin@example.com"]
+    ) is False
+
+def test_verify_password_invalid_hash():
+    result = verify_password(
+        "password1234",
+        "this-is-not-a-valid-hash"
+    )
+
+    assert result is False

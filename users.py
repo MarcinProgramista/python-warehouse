@@ -1,5 +1,8 @@
 from argon2 import PasswordHasher
-from argon2.exceptions import VerificationError
+from argon2.exceptions import (
+    VerificationError,
+    InvalidHashError,
+)
 
 password_hasher = PasswordHasher()
 
@@ -40,7 +43,6 @@ def hash_password(password):
 
 def is_valid_email(email):
     email = email.strip()
-    
     if email.count("@") != 1:
         return False
 
@@ -80,5 +82,5 @@ def register_user(users, email, password):
 def verify_password(password, hashed_password):
     try:
         return password_hasher.verify(hashed_password, password)
-    except VerificationError:
+    except(VerificationError, InvalidHashError) :
         return False
