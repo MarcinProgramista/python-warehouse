@@ -1,12 +1,18 @@
 from utils import get_positive_int, get_positive_float
+from user_warehouse import get_user_products
 import warehouse
 warehouse_name = "MY WAREHOUSE"
-products = [
-    {"name": "Laptop", "quantity": 5, "price": 3000},
-    {"name": "Monitor", "quantity": 2, "price": 1200},
-    {"name": "Mysz", "quantity": 20, "price": 80},
-    {"name": "Klawiatura", "quantity": 0, "price": 150}
-]
+user_warehouses = {
+    "marcin@example.com": [
+        {"name": "Laptop", "quantity": 5, "price": 3000},
+        {"name": "Monitor", "quantity": 2, "price": 1200},
+        {"name": "Mysz", "quantity": 20, "price": 80},
+        {"name": "Klawiatura", "quantity": 0, "price": 150}
+    ]
+}
+
+current_user = "marcin@example.com"
+products = get_user_products(user_warehouses, current_user)
 def show_menu(warehouse_name):
     print('========================')
     print(f'     {warehouse_name}      ')
