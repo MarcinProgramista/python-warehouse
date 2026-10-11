@@ -6,6 +6,7 @@ from users import (
     is_valid_password,
     hash_password,
     verify_password,
+    change_password,
     SUCCESS,
     INVALID_EMAIL,
     INVALID_PASSWORD,
@@ -221,3 +222,69 @@ def test_login_user_wrong_password_does_not_change_users():
     )
 
     assert users == users_before
+
+def test_change_password_success():
+    users = {}
+
+    register_user(
+        users,
+        "marcin@example.com",
+        "password1234"
+    )
+
+    result = change_password(
+        users,
+        "marcin@example.com",
+        "password1234",
+        "newpassword123"
+    )
+
+    assert result == SUCCESS
+    assert verify_password(
+        "newpassword123",
+        users["marcin@example.com"]
+    ) is True
+
+def test_change_password_wrong_old_password():
+    users = {}
+
+    register_user(
+        users,
+        "marcin@example.com",
+        "password1234"
+    )
+
+    result = change_password(
+        users,
+        "marcin@example.com",
+        "wrongpassword123",
+        "newpassword123"
+    )
+
+    assert result == INVALID_CREDENTIALS
+    assert verify_password(
+        "password1234",
+        users["marcin@example.com"]
+    ) is True
+
+def test_change_password_invalid_new_password():
+    users = {}
+
+    register_user(
+        users,
+        "marcin@example.com",
+        "password1234"
+    )
+
+    result = change_password(
+        users,
+        "marcin@example.com",
+        "password1234",
+        "123"
+    )
+
+    assert result == INVALID_PASSWORD
+    assert verify_password(
+        "password1234",
+        users["marcin@example.com"]
+    ) is True

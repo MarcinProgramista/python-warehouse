@@ -9,6 +9,22 @@ INVALID_PASSWORD = "INVALID_PASSWORD"
 EMAIL_ALREADY_EXISTS = "EMAIL_ALREADY_EXISTS"
 INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
 
+def change_password(users, email, old_password, new_password):
+    email = normalize_email(email)
+
+    if email not in users:
+        return INVALID_CREDENTIALS
+
+    if not verify_password(old_password, users[email]):
+        return INVALID_CREDENTIALS
+
+    if not is_valid_password(new_password):
+        return INVALID_PASSWORD
+
+    users[email] = hash_password(new_password)
+
+    return SUCCESS
+
 def login_user(users, email, password):
     email = normalize_email(email)
 
