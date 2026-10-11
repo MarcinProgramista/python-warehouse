@@ -288,3 +288,16 @@ def test_change_password_invalid_new_password():
         "password1234",
         users["marcin@example.com"]
     ) is True
+
+def test_change_password_user_not_found():
+    users = {}
+
+    result = change_password(
+        users,
+        "unknown@example.com",
+        "password1234",
+        "newpassword123"
+    )
+
+    assert result == INVALID_CREDENTIALS
+    assert users == {}
