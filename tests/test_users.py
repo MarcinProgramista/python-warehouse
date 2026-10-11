@@ -1,5 +1,6 @@
 from users import (
     register_user,
+    login_user,
     normalize_email,
     is_valid_email,
     is_valid_password,
@@ -9,7 +10,25 @@ from users import (
     INVALID_EMAIL,
     INVALID_PASSWORD,
     EMAIL_ALREADY_EXISTS,
+    INVALID_CREDENTIALS
 )
+
+def test_login_user_success():
+    users = {}
+
+    register_user(
+        users,
+        "marcin@example.com",
+        "password1234"
+    )
+
+    result = login_user(
+        users,
+        "marcin@example.com",
+        "password1234"
+    )
+
+    assert result == SUCCESS
 
 
 def test_register_user_duplicate_email():
@@ -144,3 +163,26 @@ def test_hash_password_is_different_each_time():
     hash_2 = hash_password(password)
 
     assert hash_1 != hash_2
+
+def test_login_user_wrong_password():
+    users = {}
+    register_user(users, "marcin@example.com", "password1234")
+
+    result = login_user(
+        users,
+        "marcin@example.com",
+        "wrongpassword123"
+    )
+
+    assert result == INVALID_CREDENTIALS
+
+def test_login_user_not_found():
+    users = {}
+
+    result = login_user(
+        users,
+        "unknown@example.com",
+        "password1234"
+    )
+
+    assert result == INVALID_CREDENTIALS
