@@ -1,12 +1,58 @@
 from utils import get_positive_int, get_positive_float
+from user_warehouse import get_user_products
+from users import (
+    register_user,
+    login_user,
+    SUCCESS,
+)
 import warehouse
+
+users = {}
+
+def login(users):
+    email = input("Email: ")
+    password = input("Password: ")
+
+    result = login_user(users, email, password)
+
+    if result == SUCCESS:
+        print("Login successful!")
+        return email.strip().lower()
+
+    print("Invalid email or password")
+    return None
+
+def register(users):
+    email = input("Email: ")
+    password = input("Password: ")
+
+    result = register_user(users, email, password)
+
+    if result == SUCCESS:
+        print("Registration successful!")
+        return True
+
+    print(f"Registration failed: {result}")
+    return False
+
+register_user(
+    users,
+    "marcin@example.com",
+    "Magazyn12345!"
+)
+
+
 warehouse_name = "MY WAREHOUSE"
-products = [
-    {"name": "Laptop", "quantity": 5, "price": 3000},
-    {"name": "Monitor", "quantity": 2, "price": 1200},
-    {"name": "Mysz", "quantity": 20, "price": 80},
-    {"name": "Klawiatura", "quantity": 0, "price": 150}
-]
+user_warehouses = {
+    "marcin@example.com": [
+        {"name": "Laptop", "quantity": 5, "price": 3000},
+        {"name": "Monitor", "quantity": 2, "price": 1200},
+        {"name": "Mysz", "quantity": 20, "price": 80},
+        {"name": "Klawiatura", "quantity": 0, "price": 150}
+    ]
+}
+
+
 def show_menu(warehouse_name):
     print('========================')
     print(f'     {warehouse_name}      ')
@@ -99,13 +145,46 @@ def sell_product_menu(products):
     else:
         print('Not enough stock.')
 
-while True:
-    show_menu(warehouse_name)
-    choice = input('Choose an option: ')
-   
-    if choice == '0':
-            print('Goodbye!')
+
+def main():
+    while True:
+        print("\n1. Login")
+        print("2. Register")
+        print("0. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            current_user = login(users)
+
+            if current_user is not None:
+                break
+
+            print("Login failed. Try again.")
+
+        elif choice == "2":
+            register(users)
+
+        elif choice == "0":
+            print("Goodbye!")
+            return
+
+        else:
+            print("Invalid option.")
+
+    products = get_user_products(user_warehouses, current_user)
+
+    while True:
+        show_menu(warehouse_name)
+        choice = input("Choose an option: ")
+
+        if choice == "0":
+            print("Goodbye!")
             break
 
-    handle_choice(choice, products)
-    
+        handle_choice(choice, products)
+
+
+
+if __name__ == "__main__":
+    main()

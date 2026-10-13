@@ -16,9 +16,10 @@ def test_search_product_found(products):
     result = search_product(products, "Laptop")
 
     assert result["name"] == "Laptop"
+    assert result["quantity"] == 10
 
 def test_search_product_not_found(products):
-    result = search_product(products, "Phone")
+    result = search_product(products, "Keyboard")
 
     assert result is None
 
@@ -28,29 +29,35 @@ def test_add_product(products):
     assert result is True
     assert len(products) == 3
     assert products[-1]["name"] == "Keyboard"
+    assert products[-1]["quantity"] == 5
+    assert products[-1]["price"] == 100
 
 def test_add_product_duplicate(products):
     result = add_product(products, "Laptop", 5, 100)
 
     assert result is False
     assert len(products) == 2
+    assert products[0]["quantity"] == 10
 
 def test_update_quantity(products):
     result = update_quantity(products, "Laptop", 5)
 
     assert result is True
     assert products[0]["quantity"] == 15
-
+    assert products[0]["price"] == 1500
+    
 def test_sell_product(products):
     result = sell_product(products, "Laptop", 3)
     assert result is True
     assert products[0]["quantity"] == 7
+    assert products[0]["price"] == 1500
 
 def test_sell_product_not_enough_stock(products):
     result = sell_product(products, "Monitor", 5)
 
     assert result is None
     assert products[1]["quantity"] == 2
+    assert products[1]["price"] == 1200
 
 def test_sell_product_not_found(products):
     result = sell_product(products, "Phone", 1)
@@ -63,13 +70,14 @@ def test_delete_product(products):
     assert result is True
     assert len(products) == 1
     assert products[0]["name"] == "Monitor"
+    assert products[0]["price"] == 1200
 
 def test_delete_product_not_found(products):
     result = delete_product(products, "Phone")
 
     assert result is False
     assert len(products) == 2
-
+    assert products[0]["quantity"] == 10
 
 
 @pytest.mark.parametrize("name, quantity, price, expected",
@@ -137,11 +145,57 @@ def test_calculate_total_value(products):
 
     assert result == 17400
 
+def test_calculate_total_value_one_product():
+    products = [
+        {"name": "Keyboard", "quantity": 4, "price": 100}
+    ]
+
+    result = calculate_total_value(products)
+   
+    assert result == 400
+
+def test_calculate_total_value_multiple_products():
+    products = [
+        {"name": "Keyboard", "quantity": 4, "price": 100},
+        {"name": "Mouse", "quantity": 3, "price": 50}
+    ]
+
+    result = calculate_total_value(products)
+       
+    assert result == 550
+
+def test_calculate_total_value_zero_quantity():
+    products = [
+        {"name": "Keyboard", "quantity": 0, "price": 100},
+        {"name": "Mouse", "quantity": 3, "price": 50}
+    ]
+
+    result = calculate_total_value(products)
+           
+    assert result == 150
+
 def test_find_most_expensive(products):
     result = find_most_expensive(products)
 
     assert result["name"] == "Laptop"
     assert result["price"] == 1500
+
+def test_find_most_expensive_two_products():
+    products = [
+        {"name": "Keyboard", "quantity": 4, "price": 100},
+        {"name": "Monitor", "quantity": 2, "price": 1200}
+    ]
+    result = find_most_expensive(products)
+
+    assert result["name"] == "Monitor"
+    assert result["price"] == 1200
+
+def test_find_most_expensive_empty():
+    products = []
+
+    result = find_most_expensive(products)
+
+    assert result == {}
 
 def test_show_low_stock(products, capsys):
     show_low_stock(products)
@@ -158,3 +212,14 @@ def test_show_products(products, capsys):
 
     assert "Laptop" in captured.out
     assert "Monitor" in captured.out
+
+def test_search_monitor(products):
+    result = search_product(products, "Monitor")
+
+    assert result["name"] == "Monitor"
+    assert result["quantity"] == 2
+
+def test_calculate_total_value_empty():
+    result = calculate_total_value([])
+
+    assert result == 0
